@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.2.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>2.3.0.RELEASE</version>
 	</parent>
+
 	<groupId>ru.otus</groupId>
 	<artifactId>2020-05-otus-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>2020-05-otus-spring</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Otus homework project for MVC app</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -27,11 +27,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
