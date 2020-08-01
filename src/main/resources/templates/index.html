@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Books</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Books table</h1>
+    <div class="table-responsive-sm">
+        <table id="bookTable" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.title}">War and Peace</td>
+                <td th:text="${book.author}">Leo Tolstoy</td>
+                <td th:text="${book.genre}">novel</td>
+                <td th:text="${book.comments}">very good book</td>
+                <td><a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-warning">Update</a></td>
+                <td><a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form action="#" th:action="@{/initbook}">
+        <input type="submit" class="btn btn-primary" value="+ Add book"/>
+    </form>
+</div>
+</body>
+</html>
+
