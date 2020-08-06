@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,12 +21,12 @@ public class Book {
     private String author;
     @NotBlank
     private String genre;
-    private List<String> comments;
+    private String comment;
 
-    public Book(String title, String author, String genre, List<String> comments) {
+    public Book(String title, String author, String genre, String comment) {
         this.title = title;
         this.author = author;
         this.genre = genre;
-        this.comments = comments;
+        this.comment = comment;
     }
 }

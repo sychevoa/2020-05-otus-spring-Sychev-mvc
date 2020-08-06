@@ -29,7 +29,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("выводить все книги на главной странице")
     public void test() throws Exception {
-        given(bookService.getAll()).willReturn(List.of(new Book("Anna Karenina", "Leo Tolstoy", "novel", List.of("no comment"))));
+        given(bookService.getAll()).willReturn(List.of(new Book("Anna Karenina", "Leo Tolstoy", "novel", "no comment")));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
