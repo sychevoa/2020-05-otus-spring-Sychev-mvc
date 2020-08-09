@@ -29,13 +29,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String add(Book book) {
-        Book savedBook = bookRepo.save(book);
-
-        return savedBook.getId();
-    }
-
-    @Override
     public void delete(String id) {
 
         bookRepo.deleteById(id);
@@ -45,5 +38,11 @@ public class BookServiceImpl implements BookService {
     public Book save(Book book) {
 
         return bookRepo.save(book);
+    }
+
+    @Override
+    public boolean exists(String id) {
+
+        return bookRepo.existsById(id);
     }
 }
