@@ -3,46 +3,47 @@ package ru.otus.otusspring.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.otusspring.exception.BookNotFoundException;
 import ru.otus.otusspring.model.Book;
-import ru.otus.otusspring.service.BookService;
+import ru.otus.otusspring.repositories.BookMongoRepository;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BookRestController {
 
-    private final BookService service;
+    private final BookMongoRepository repository;
 
-    @GetMapping("/allbooks")
-    public List<Book> getAll() {
+    @GetMapping("/books")
+    public Flux<Book> getAll() {
 
-        return service.getAll();
+        return repository.findAll();
     }
 
     @GetMapping("/book/{id}")
-    public Book get(@PathVariable String id) {
+    public Mono<Book> get(@PathVariable String id) {
 
-        return service.getOne(id);
+        return repository.findById(id);
     }
 
     @PostMapping("/book")
-    public ResponseEntity<String> save(@Valid Book book) {
-        String bookId = service.save(book).getId();
+    public Mono<String> save(@Valid Book book) {
 
-        return ResponseEntity.ok(bookId);
+        return repository
+                .save(book)
+                .map(Book::getId);
     }
 
     @DeleteMapping("/book/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        if (!service.exists(id))
-            throw new BookNotFoundException(id);
+    public Mono<Void> delete(@PathVariable String id) {
 
-        service.delete(id);
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new BookNotFoundException(id)))
+                .flatMap(repository::delete);
 
-        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler(BookNotFoundException.class)

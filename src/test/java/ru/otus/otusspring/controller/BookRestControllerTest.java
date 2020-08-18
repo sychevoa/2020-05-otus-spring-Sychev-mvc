@@ -1,36 +1,51 @@
 package ru.otus.otusspring.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import ru.otus.otusspring.model.Book;
-import ru.otus.otusspring.service.BookService;
+import ru.otus.otusspring.repositories.BookMongoRepository;
+
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(BookRestController.class)
 @DisplayName("BookRestController должен: ")
+@WebFluxTest(BookRestController.class)
 public class BookRestControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient webTestClient;
 
     @MockBean
-    private BookService bookService;
+    private BookMongoRepository repository;
 
-    @Test
-    @DisplayName("получать ожидаемую книгу по ID")
-    public void shouldReturnExpectedBookById() throws Exception {
-        given(bookService.getOne("1")).willReturn(new Book("Anna Karenina", "Leo Tolstoy", "novel", "no comment"));
+    private Book bookOne;
+    private Book bookTwo;
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/book/1"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Anna Karenina"));
+    @BeforeEach
+    void setUp() {
+        bookOne = new Book("Test Book One", "Test Author One", "some genre one", "no comment");
+        bookTwo = new Book("Test Book Two", "Test Autho Twor", "some genre two", "with comment");
     }
+
+    @DisplayName("возвращать все имеющиеся книги")
+    @Test
+    void shouldReturnAllBooks() {
+        List<Book> books = List.of(bookOne, bookTwo);
+        given(repository.findAll()).willReturn(Flux.just(bookOne, bookTwo));
+
+        webTestClient.get().uri("/books")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Book.class)
+                .hasSize(2)
+                .isEqualTo(books);
+    }
+
 }
