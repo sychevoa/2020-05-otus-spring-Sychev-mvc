@@ -1,6 +1,5 @@
 package ru.otus.otusspring.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
-                .authorizeRequests().antMatchers("/", "/**", "/*").hasRole("USER")
+                .authorizeRequests().antMatchers("/").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/delete/*").hasRole("ADMIN")
+                .and()
+                .authorizeRequests().antMatchers("/**", "/*").hasAnyRole("ADMIN", "USER")
                 .and()
                 .formLogin();
     }

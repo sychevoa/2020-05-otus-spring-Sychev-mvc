@@ -17,9 +17,19 @@ public class InitMongoData {
     @Bean
     private CommandLineRunner initData() {
         return args -> {
+            User admin = new User();
+            admin.setName("admin");
+            admin.setPassword("pass");
+            admin.setRole("ADMIN");
+
             User user = new User();
-            user.setName("admin");
-            user.setPassword("pass");
+            user.setName("user");
+            user.setPassword("password");
+            user.setRole("USER");
+
+            if (!repository.exists(Example.of(admin))) {
+                repository.save(admin);
+            }
 
             if (!repository.exists(Example.of(user))) {
                 repository.save(user);

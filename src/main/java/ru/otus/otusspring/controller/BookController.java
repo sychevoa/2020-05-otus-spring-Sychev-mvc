@@ -22,6 +22,12 @@ public class BookController {
     private final BookService service;
 
     @GetMapping("/")
+    public String welcome() {
+
+        return "public";
+    }
+
+    @GetMapping("/index")
     public String main(Model model) {
         model.addAttribute("books", service.getAll());
 
@@ -43,7 +49,7 @@ public class BookController {
         String bookId = service.add(book);
         model.addAttribute("bookId", bookId);
 
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
@@ -53,7 +59,7 @@ public class BookController {
         model.addAttribute("book", book);
         service.delete(id);
 
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @GetMapping("/edit/{id}")
@@ -74,7 +80,7 @@ public class BookController {
         service.save(book);
         model.addAttribute("books", service.getAll());
 
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @ExceptionHandler(BookNotFoundException.class)

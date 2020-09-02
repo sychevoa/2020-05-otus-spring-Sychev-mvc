@@ -13,15 +13,17 @@ public class UserDetailsImpl implements UserDetails {
 
     private String name;
     private String password;
+    private String role;
 
     public UserDetailsImpl(User user) {
         this.name = user.getName();
         this.password = user.getPassword();
+        this.role = user.getRole();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
         return List.of(authority);
     }
 
