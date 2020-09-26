@@ -5,3 +5,23 @@ spring:
       port: 27017
       host: 127.0.0.1
       database: libraryDB
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+logging:
+  file:
+    name: "target/app.log"
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            logging: DEBUG
