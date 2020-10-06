@@ -65,6 +65,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>2020-05-otus-spring</finalName>
 	</build>
 
 </project>
