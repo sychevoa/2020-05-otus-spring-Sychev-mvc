@@ -1,5 +1,6 @@
 package ru.otus.otusspring.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.otusspring.exception.BookNotFoundException;
@@ -16,6 +17,7 @@ public class BookServiceImpl implements BookService {
     private final BookMongoRepository bookRepo;
 
     @Override
+    @HystrixCommand(commandKey = "commonBookKey", fallbackMethod = "fallBackGetBook")
     public Book getOne(String id) {
         Optional<Book> bookOptional = bookRepo.findById(id);
 
@@ -23,6 +25,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @HystrixCommand(commandKey = "commonBookKey", fallbackMethod = "fallBackGetAllBooks")
     public List<Book> getAll() {
 
         return bookRepo.findAll();
@@ -35,8 +38,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @HystrixCommand(commandKey = "commonBookKey", fallbackMethod = "fallBackSaveBook")
     public Book save(Book book) {
-
+        
         return bookRepo.save(book);
     }
 
@@ -45,4 +49,20 @@ public class BookServiceImpl implements BookService {
 
         return bookRepo.existsById(id);
     }
+
+    private Book fallBackGetBook(String id) {
+
+        return new Book(id, "n/a", "n/a", "n/a");
+    }
+
+    private List<Book> fallBackGetAllBooks() {
+
+        return List.of(fallBackGetBook("n/a"));
+    }
+
+    private Book fallBackSaveBook(Book book) {
+
+        return fallBackGetBook("n/a");
+    }
+
 }
